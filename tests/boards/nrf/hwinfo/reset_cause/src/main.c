@@ -276,6 +276,7 @@ void set_reset_grtc(uint32_t cause)
 	LOG_INF("Test RESET_CLOCK - Rebooting");
 	retained_mem_write(retained_mem_device, 0, (uint8_t *){1}, sizeof(uint8_t));
 	int32_t ret;
+
 	ret = z_nrf_grtc_wakeup_prepare(2 * USEC_PER_SEC);
 	if (ret == 0) {
 		LOG_INF("Entering SystemOff, wakeup in 2000 ms");
@@ -284,20 +285,22 @@ void set_reset_grtc(uint32_t cause)
 	}
 	print_bar();
 	sys_poweroff();
- }
-void check_reset_grtc(uint32_t cause) {
+}
+
+void check_reset_grtc(uint32_t cause)
+{
 	retained_mem_write(retained_mem_device, 0, (uint8_t *){0}, sizeof(uint8_t));
-		/* Reset from GRTC was done */
-		LOG_INF("TEST that RESET_CLOCK was detected");
-		if (cause & RESET_CLOCK) {
-			LOG_INF("PASS: RESET_CLOCK detected");
-			print_bar();
-			/* Check RESET_CLOCK can be cleared */
-			test_clear_reset_cause();
-		} else {
-			LOG_ERR("FAIL: RESET_CLOCK not set");
-			print_bar();
-		}
+	/* Reset from GRTC was done */
+	LOG_INF("TEST that RESET_CLOCK was detected");
+	if (cause & RESET_CLOCK) {
+		LOG_INF("PASS: RESET_CLOCK detected");
+		print_bar();
+		/* Check RESET_CLOCK can be cleared */
+		test_clear_reset_cause();
+	} else {
+		LOG_ERR("FAIL: RESET_CLOCK not set");
+		print_bar();
+	}
 }
 
 void test_reset_watchdog(uint32_t cause)
@@ -403,7 +406,7 @@ int main(void)
 		}
 	}
 	retained_mem_read(retained_mem_device, 0, (uint8_t *)&grtc_wakeup, sizeof(grtc_wakeup));
-	if(grtc_wakeup != 0){
+	if (grtc_wakeup != 0) {
 		check_reset_grtc(cause);
 	}
 

@@ -11,6 +11,7 @@
 
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/hwinfo.h>
 #include <zephyr/drivers/comparator.h>
 #include <zephyr/kernel.h>
 #include <zephyr/pm/device.h>
@@ -56,6 +57,18 @@ int main(void)
 	}
 
 #if defined(CONFIG_GRTC_WAKEUP_ENABLE)
+	uint32_t reset_cause;
+
+	hwinfo_get_reset_cause(&reset_cause);
+
+	if (reset_cause & RESET_DEBUG) {
+		printf("Reset by debugger.\n");
+	} else if (reset_cause & RESET_CLOCK) {
+		printf("Wakeup by GRTC.\n");
+	} else  {
+		printf("Other wake up cause 0x%08X.\n", reset_cause);
+	}
+	hwinfo_clear_reset_cause();
 	int err = z_nrf_grtc_wakeup_prepare(DEEP_SLEEP_TIME_S * USEC_PER_SEC);
 
 	if (err < 0) {

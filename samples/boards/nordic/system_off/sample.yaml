@@ -62,9 +62,11 @@ tests:
       ordered: true
       regex:
         - "system off demo"
+        - "Reset by debugger"
         - "Retained data not supported"
         - "Entering system off; wait 2 seconds to restart"
         - "system off demo"
+        - "Wakeup by GRTC."
         - "Retained data not supported"
         - "Entering system off; wait 2 seconds to restart"
         - "system off demo"
@@ -86,12 +88,14 @@ tests:
       ordered: true
       regex:
         - "system off demo"
+        - "Reset by debugger"
         - "Retained data: INVALID"
         - "Boot count: 1"
         - "Off count: 0"
         - "Active Ticks:"
         - "Entering system off; wait 2 seconds to restart"
         - "system off demo"
+        - "Wakeup by GRTC."
         - "Retained data: valid"
         - "Boot count: 2"
         - "Off count: 1"
